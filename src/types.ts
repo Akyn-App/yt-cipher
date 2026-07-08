@@ -36,6 +36,19 @@ export interface ResolveUrlResponse {
     resolved_url: string;
 }
 
+export interface PoTokenRequest {
+    visitorData?: string;
+    videoId?: string;
+    client?: string;
+}
+
+export interface PoTokenResponse {
+    visitorDataToken: string;
+    visitorData: string;
+    videoIdToken?: string;
+    expiresAt: string;
+}
+
 export interface WorkerWithStatus extends Worker {
     isIdle?: boolean;
 }
@@ -46,7 +59,7 @@ export interface Task {
     reject: (error: any) => void;
 }
 
-export type ApiRequest = SignatureRequest | StsRequest | ResolveUrlRequest;
+export type ApiRequest = SignatureRequest | StsRequest | ResolveUrlRequest | PoTokenRequest;
 
 // Parsing into this context helps avoid multi copies of requests
 // since request body can only be read once. 

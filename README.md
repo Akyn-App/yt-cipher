@@ -218,3 +218,52 @@ Resolves a raw stream URL by handling the signature and n-parameter decryption, 
   "resolved_url": "..."
 }
 ```
+
+### `POST /get_po_token`
+
+Generates a YouTube Proof of Origin (PO) token using BotGuard challenge resolution. This token is required by some YouTube clients for authenticated playback.
+
+**Request Body:**
+
+```json
+{
+  "visitorData": "...",
+  "videoId": "...",
+  "client": "..."
+}
+```
+
+- `visitorData` (string, optional): YouTube visitor data string. If omitted, one is auto-generated via the Innertube API.
+- `videoId` (string, optional): A YouTube video ID. When provided, an additional video-bound token is returned.
+- `client` (string, optional): Client type (e.g., `IOS`, `ANDROID`). For mobile clients, the video token is bound to `visitorData` instead of `videoId`.
+
+**Successful Response:**
+
+```json
+{
+  "visitorDataToken": "...",
+  "visitorData": "...",
+  "videoIdToken": "...",
+  "expiresAt": "2025-01-01T00:00:00.000Z"
+}
+```
+
+- `visitorDataToken` (string): The PO token bound to the visitor data.
+- `visitorData` (string): The visitor data used (useful when auto-generated).
+- `videoIdToken` (string, optional): The PO token bound to the video/visitor, present only when `videoId` was provided.
+- `expiresAt` (string): ISO 8601 timestamp when this token expires.
+
+**Example `curl` request:**
+
+```bash
+curl -X POST http://localhost:8001/get_po_token \
+-H "Content-Type: application/json" \
+-H "Authorization: your_secret_token" \
+-d '{
+  "videoId": "dQw4w9WgXcQ"
+}'
+```
+
+> [!NOTE]
+> This endpoint does not require a `player_url`. It communicates directly with YouTube's attestation service and does not depend on any player script.
+

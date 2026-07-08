@@ -86,3 +86,39 @@ paths:
                 properties:
                   resolved_url:
                     type: string
+  /get_po_token:
+    post:
+      summary: Generates a YouTube Proof of Origin (PO) token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                visitorData:
+                  type: string
+                  description: YouTube visitor data string. Auto-generated if omitted.
+                videoId:
+                  type: string
+                  description: Optional video ID to generate a video-bound token.
+                client:
+                  type: string
+                  description: Client type (e.g., IOS, ANDROID). Affects video token binding.
+      responses:
+        '200':
+          description: Generated PO token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  visitorDataToken:
+                    type: string
+                  visitorData:
+                    type: string
+                  videoIdToken:
+                    type: string
+                  expiresAt:
+                    type: string
+                    format: date-time
